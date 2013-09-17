@@ -45,14 +45,17 @@ int main(int argc, char** argv)
 	edge e[nedge];
 	element el[nx-1][ny-1];
 
+    if (argc!=6)
+	{
+		cout<<"usage: txt2dfise [corr_x][corr_y][gen][.grd][.dat]"<<endl;
+		return(0);
+	}
 
-
-
-	corr_x.open("./test/corr_x.txt");
-	corr_y.open("./test/corr_y.txt");
-	gen.open("./test/gen.txt");
-	grd.open("./output.grd");
-	dat.open("./output.dat");
+	corr_x.open(argv[1]);
+	corr_y.open(argv[2]);
+	gen.open(argv[3]);
+	grd.open(argv[4]);
+	dat.open(argv[5]);
 
 	for (i=0;i<nx;i++)
 		corr_x>>x[i];
