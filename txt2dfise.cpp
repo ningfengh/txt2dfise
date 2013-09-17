@@ -1,10 +1,5 @@
-#define nx 100
-#define ny 500
-
-#define nvertex (nx*ny)
-#define nedge ((nx-1)*ny + (ny-1)*nx)
-#define nelement ((nx-1)*(ny-1))
-
+#define NX_MAX 1000
+#define NY_MAX 2000
 
 #include <iostream>
 #include <fstream>
@@ -30,20 +25,29 @@ struct element {
 };
 
 
+
+
 int main(int argc, char** argv)
 {
 	ifstream corr_x,corr_y,gen;
 	ofstream grd,dat;
 
 	long int i,j,count;
-
-	double x[nx],y[ny];
-	double gen_data[nx][ny];
-	long int map[nx][ny];
-
-	vertex v[nvertex];
-	edge e[nedge];
-	element el[nx-1][ny-1];
+	long int nx,ny;
+	long int nvertex;
+	long int nedge;
+	long int nelement;
+	double x[NX_MAX],y[NY_MAX];
+    //double gen_data[nx][ny];
+	//long int map[nx][ny];
+    double **gen_data;
+	long int **map;
+	vertex *v;
+	edge *e;
+	element **el;
+	//vertex v[nvertex];
+	//edge e[nedge];
+	//element el[nx-1][ny-1];
 
     if (argc!=6)
 	{
@@ -57,11 +61,54 @@ int main(int argc, char** argv)
 	grd.open(argv[4]);
 	dat.open(argv[5]);
 
-	for (i=0;i<nx;i++)
-		corr_x>>x[i];
-	for (i=0;i<ny;i++)
-		corr_y>>y[i];
+	i = 0;
+	while (!corr_x.eof( ))      //if not at end of file, continue reading numbers
+    {
+          corr_x >> x[i];               //get next number from file
+		  i++;
+    }
+	cout<<"nx="<<i-1<<endl;
+	nx = i-1;
+	i = 0;
+	while (!corr_y.eof( ))      //if not at end of file, continue reading numbers
+    {
+          corr_y >> y[i];               //get next number from file
+		  i++;
+    }
+	cout<<"ny="<<i-1<<endl;	
+	ny = i-1;
+	
 
+    nvertex = (nx*ny);
+    nedge =((nx-1)*ny + (ny-1)*nx);
+	nelement = (nx-1)*(ny-1);
+	
+	
+	//for (i=0;i<nx;i++)
+	//	corr_x>>x[i];
+	//for (i=0;i<ny;i++)
+	//	corr_y>>y[i];
+// allocate memory
+		
+	gen_data = new double*[nx];
+	for(int i = 0; i < nx; ++i)
+    gen_data[i] = new double[ny];
+	
+	map = new long int*[nx];
+	for(int i = 0; i < nx; ++i)
+    map[i] = new long int[ny];
+	
+	v = new vertex[nvertex];
+	e = new edge[nedge];
+
+	el = new element*[nx-1];
+	for(int i = 0; i < nx-1; ++i)
+    el[i] = new element[ny-1];	
+
+// end of allocate memory
+
+
+	
 	for (i=0;i<ny;i++)
 		for (j=0;j<nx;j++)
 			gen>>gen_data[j][i];
@@ -262,6 +309,30 @@ int main(int argc, char** argv)
 	grd.close();
 	dat.close();
 
+	
+	cout<<"finish converting !"<<endl;
+	// release memory
+
+	for(int i = 0; i < nx; ++i) {
+		delete [] gen_data[i];
+	}
+	delete [] gen_data;
+
+	for(int i = 0; i < nx; ++i) {
+		delete [] map[i];
+	}
+	
+	delete [] v;
+	delete [] e;
+	
+	for(int i = 0; i < nx-1; ++i) {
+		delete [] el[i];
+	}
+	delete [] el;
+	
+	// end of release memory
+	
+	
 	
 //	system("pause");
 	return 0;
