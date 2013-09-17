@@ -1,5 +1,5 @@
-#define nx 20
-#define ny 100
+#define nx 100
+#define ny 500
 
 #define nvertex (nx*ny)
 #define nedge ((nx-1)*ny + (ny-1)*nx)
@@ -48,9 +48,9 @@ int main(int argc, char** argv)
 
 
 
-	corr_x.open("./corr_x.txt");
-	corr_y.open("./corr_y.txt");
-	gen.open("./gen.txt");
+	corr_x.open("./test/corr_x.txt");
+	corr_y.open("./test/corr_y.txt");
+	gen.open("./test/gen.txt");
 	grd.open("./output.grd");
 	dat.open("./output.dat");
 
